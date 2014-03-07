@@ -1,0 +1,31 @@
+<html>
+<head>
+    <script src="../../vendor/jquery-1.9.1.min.js"></script>
+    <script src="../../src/dispatchMe.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            Me.dispatch.addEvent('type-1', callback1, window, "test", {paramstest1:"test"});
+            Me.dispatch.addEvent('type-1', callback2, window);
+
+            console.log("send Event :");
+            Me.dispatch.sendEvent('type-1', {scope:'this'}, {param1:true, param2:"test", param3:{}});
+
+            Me.dispatch.removeEvent('type-1', callback1, window, "test", {paramstest1:"test"});
+
+            console.log("Resend Event :");
+            Me.dispatch.sendEvent('type-1', {scope:'this'}, {param1:true, param2:"test", param3:{}});
+
+            function callback1(e, params) {
+                console.log("this is a callback 1", e, params);
+            }
+
+            function callback2(e, params) {
+                console.log("this is a callback 2", e, params);
+            }
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
