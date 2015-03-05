@@ -147,6 +147,15 @@
 		return this;
 	};
 
+	/**
+	 *
+	 * subscribe
+	 * will now listen to the type youll pass till you unsubscribe it
+	 *
+	 * @return  object scope
+	 * @access  public
+	 *
+	 */
 	proto.subscribe = function(type, callback, scope) {
 		var args      = arguments;
 		var finalArgs = [];
@@ -164,27 +173,34 @@
 			this.listeners[type] = [];
 		}
 
-		var addListener    = true;
+		var newListener    = true;
 		var totalListeners = this.listeners[type].length;
 		for (var i = 0; i < totalListeners; i++) {
 			var listener = this.listeners[type][i];
 			if (listener.scope == scope && listener.callback == callback && listener.args.join(',') == args.join(',')) {
-				addListener = false;
+				newListener = false;
 			}
 		}
 
-		if (addListener) {
-			if (this.options.debug) {
-				console.info("dispatchMe :: addEventListener : ", type, scope);
-			}
+		if (newListener) {
+			if (this.debug) {console.info(this.dname, "subscribe : ", type, scope);}
 			this.listeners[type].push({scope:scope, callback:callback, args:args});
 		} else {
-			console.warn("dispatchMe :: addEventListener, already register : ", type, scope);
+			if (this.debug) {console.warn(this.dname, "subscribe, already done : ", type, scope);}
 		}
 
 		return this;
 	};
 
+	/**
+	 *
+	 * unsubscribe
+	 * will remove a subscribe that was done before
+	 *
+	 * @return  object scope
+	 * @access  public
+	 *
+	 */
 	proto.unsubscribe = function(type, callback, scope) {
 		var args      = arguments;
 		var finalArgs = [];
@@ -212,14 +228,21 @@
 		}
 
 		if (removeListener) {
-			if (this.options.debug) {
-				console.info("dispatchMe :: removeEventListener : ", type, scope);
-			}
+			if (this.debug) {console.info(this.dname, "unsubscribe : ", type, scope);}
 		}
 
 		return this;
 	};
 
+	/**
+	 *
+	 * emit
+	 * will emit the type you'll pass so all subscribers will receive it
+	 *
+	 * @return  object scope
+	 * @access  public
+	 *
+	 */
 	proto.emit = function(type, target, params) {
 		var newparams = [];
 		if (params) {
@@ -239,9 +262,7 @@
 		};
 
 		if(typeof this.listeners[type] != "undefined") {
-			if (this.options.debug) {
-				console.group("dispatchMe :: dispatch", type, target, newparams);
-			}
+			if (this.debug) {console.group(this.dname, "emit", type, target, newparams);}
 
 			var totalListeners = this.listeners[type].length;
 			for(var i = 0; i < totalListeners; i++) {
@@ -262,17 +283,15 @@
 						}
 					}
 
-					if (this.options.debug) {
-						console.log(listener, event, params);
-					}
+					if (this.debug) {console.log(listener, event, params);}
 					listener.callback.call(listener.scope, {type: event.type, emitter: event.target, receiver: listener.scope}, params);
 				}
 			}
 
-			if (this.options.debug) {
-				console.groupEnd("dispatchMe :: dispatch", type, target, newparams);
-			}
+			if (this.debug) {console.groupEnd(this.dname, "emit", type, target, newparams);}
 		}
+
+		return this;
 	};
 
 	proto.isSubscribed = function(type, callback, scope) {
