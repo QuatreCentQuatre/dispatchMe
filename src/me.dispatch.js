@@ -1,4 +1,4 @@
-/*
+/**
  * DispatchMe from the MeLibs
  * Library - Singleton that allow to subscribe, unsubscribe, emit events
  * Dependencies :
