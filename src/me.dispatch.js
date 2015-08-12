@@ -1,17 +1,26 @@
 /**
  * DispatchMe from the MeLibs
  * Library - Singleton that allow to subscribe, unsubscribe, emit events
+ *
+ * Version :
+ *  - 1.0.0
+ *
  * Dependencies :
  *  - Jquery
  *
  * Private Methods :
+ *  -
  *
  * Public Methods :
+ *  - setOptions
+ *  - getOptions
  *  - subscribe
  *  - unsubscribe
  *  - emit
  *  - isSubscribed
+ *  - toString
  */
+
 (function($, window, document, undefined) {
 	"use strict";
 	/* Private Variables */
