@@ -1,5 +1,5 @@
 /**
- * DispatchMe from the MeLibs
+ * dispatchMe from the MeLibs
  * Library - Singleton that allow to subscribe, unsubscribe, emit events
  *
  * Version :

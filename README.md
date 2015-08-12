@@ -12,7 +12,7 @@ Library - Singleton that allow to subscribe, unsubscribe, emit events
 
 ### Dependencies
 
-**jQuery-1.10 ++** (http://jquery.com/download/)
+- **jQuery-1.10 ++** (http://jquery.com/download/)
 
 ---
 
