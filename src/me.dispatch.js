@@ -3,7 +3,7 @@
  * Library - Singleton that allow to subscribe, unsubscribe, emit events
  *
  * Version :
- *  - 1.0.2
+ *  - 1.0.3
  *
  * Dependencies :
  *  - jQuery (https://jquery.com/)
@@ -79,6 +79,20 @@
 
     /**
      *
+     * __initialize
+     * set the basics
+     *
+     * @return  object scope
+     * @access  private
+     *
+     */
+    proto.__initialize = function() {
+        this.listeners = {};
+        return this;
+    };
+
+    /**
+     *
      * __validateDependencies
      * Will check if you got all the dependencies needed to use that plugins
      *
@@ -145,20 +159,6 @@
      */
     proto.getOptions = function() {
         return this.options;
-    };
-
-    /**
-     *
-     * __initialize
-     * set the basics
-     *
-     * @return  object scope
-     * @access  private
-     *
-     */
-    proto.__initialize = function() {
-        this.listeners = {};
-        return this;
     };
 
     /**
@@ -308,6 +308,15 @@
         return this;
     };
 
+    /**
+     *
+     * isSubscribed
+     * can check if type exist or if a more precise event is subcribed
+     *
+     * @return  object scope
+     * @access  public
+     *
+     */
     proto.isSubscribed = function(type, callback, scope) {
         var existListener = false;
         if(typeof this.listeners[type] != "undefined") {
