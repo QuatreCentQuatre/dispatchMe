@@ -40,6 +40,7 @@
     var DispatchMe = function(options) {
         this.__construct(options);
     };
+
     var proto = DispatchMe.prototype;
 
     /* Private Variables */
@@ -69,11 +70,12 @@
 
         this.setOptions(options);
 
-        if (!this.__validateDependencies()) { return null; }
-        if (!this.__validateOptions()) { return null; }
-        instanceID ++;
+        if (!this.__validateDependencies()) {return null;}
+        if (!this.__validateOptions()) {return null;}
 
+        instanceID ++;
         this.__initialize();
+
         return this;
     };
 
@@ -88,10 +90,12 @@
      */
     proto.__validateDependencies = function() {
         var isValid = true;
+
         if (!window.jQuery) {
             isValid = false;
-            console.warn(this.__debugName + "required jQuery (https://jquery.com/)");
+            if (this.debug) {console.warn(this.__debugName + "required jQuery (https://jquery.com/)");}
         }
+
         return isValid;
     };
 
@@ -106,7 +110,23 @@
      */
     proto.__validateOptions = function() {
         var isValid = true;
+
         return isValid;
+    };
+
+    /**
+     *
+     * __initialize
+     * set the basics
+     *
+     * @return  object scope
+     * @access  private
+     *
+     */
+    proto.__initialize = function() {
+        this.listeners = {};
+
+        return this;
     };
 
     /**
@@ -131,6 +151,7 @@
         });
 
         this.options = settings;
+
         return this;
     };
 
@@ -149,20 +170,6 @@
 
     /**
      *
-     * __initialize
-     * set the basics
-     *
-     * @return  object scope
-     * @access  private
-     *
-     */
-    proto.__initialize = function() {
-        this.listeners = {};
-        return this;
-    };
-
-    /**
-     *
      * subscribe
      * will now listen to the type youll pass till you unsubscribe it
      *
@@ -176,11 +183,13 @@
 
         if (args) {
             var totalArgs = args.length;
+
             for (var i = 0; i < totalArgs; i++) {
                 if (i < 3) { continue; }
                 finalArgs.push(args[i]);
             }
         }
+
         args = finalArgs;
 
         if (typeof this.listeners[type] == "undefined") {
@@ -189,8 +198,10 @@
 
         var newListener    = true;
         var totalListeners = this.listeners[type].length;
+
         for (var i = 0; i < totalListeners; i++) {
             var listener = this.listeners[type][i];
+
             if (listener.scope == scope && listener.callback == callback && listener.args.join(',') == args.join(',')) {
                 newListener = false;
             }
@@ -221,21 +232,27 @@
 
         if(args) {
             var totalArgs = args.length;
+
             for (var i = 0; i < totalArgs; i++) {
                 if (i < 3) { continue; }
                 finalArgs.push(args[i]);
             }
         }
+
         args = finalArgs;
 
         var removeListener = false;
+
         if (typeof this.listeners[type] != "undefined") {
             var totalListeners = this.listeners[type].length;
+
             for (var i = 0; i < totalListeners; i++) {
                 var listener = this.listeners[type][i];
+
                 if(listener.scope == scope && listener.callback == callback && listener.args.join(',') == args.join(',')) {
                     removeListener = true;
                     this.listeners[type].splice(i, 1);
+
                     break;
                 }
             }
@@ -259,6 +276,7 @@
      */
     proto.emit = function(type, target, params) {
         var newparams = [];
+
         if (params) {
             if (typeof params == "object" && typeof params.length == "undefined") {
                 newparams.push(params);
@@ -276,16 +294,18 @@
         };
 
         if(typeof this.listeners[type] != "undefined") {
-            if (this.debug) {console.group(this.__debugName, "emit", type, target, newparams);}
-
+            if (this.debug) {console.group(this.__debugName, "emit : ", type, target, newparams);}
             var totalListeners = this.listeners[type].length;
+
             for(var i = 0; i < totalListeners; i++) {
                 var listener = this.listeners[type][i];
+
                 if(listener && listener.callback) {
                     var sources = event.params.concat(listener.args);
                     var params = {};
                     var index = 0;
                     var totalSources = sources.length;
+
                     for (var a = 0; a < totalSources; a++) {
                         if (typeof sources[a] == "object" && typeof sources[a].length == "undefined") {
                             for (var b in sources[a]) {
@@ -302,21 +322,32 @@
                 }
             }
 
-            if (this.debug) {console.groupEnd(this.__debugName, "emit", type, target, newparams);}
+            if (this.debug) {console.groupEnd(this.__debugName, "emit : ", type, target, newparams);}
         }
 
         return this;
     };
 
+    /**
+     *
+     * isSubscribed
+     *
+     * @return  boolean
+     * @access  public
+     *
+     */
     proto.isSubscribed = function(type, callback, scope) {
         var existListener = false;
+
         if(typeof this.listeners[type] != "undefined") {
             var totalListeners = this.listeners[type].length;
+
             if (typeof callback == "undefined" && typeof scope == "undefined") {
                 existListener = (totalListeners > 0);
             } else {
                 for(var i = 0; i < totalListeners; i++) {
                     var listener = this.listeners[type][i];
+
                     if(listener.scope == scope && listener.callback == callback) {
                         existListener = true;
                     }
@@ -324,6 +355,7 @@
             }
 
         }
+
         return existListener;
     };
 
