@@ -1,0 +1,3 @@
+Me libs that depend on DispatchMe :
+
+- InfiniteMe
