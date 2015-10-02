@@ -1,15 +1,12 @@
 /**
- * dispatchMe from the MeLibs
+ * DispatchMe from the MeLibs
  * Library - Singleton that allow to subscribe, unsubscribe, emit events
  *
  * Version :
  *  - 1.0.2
  *
  * Dependencies :
- *  - Jquery
- *
- * Private Methods :
- *  -
+ *  - jQuery (https://jquery.com/)
  *
  * Public Methods :
  *  - setOptions
@@ -18,18 +15,21 @@
  *  - unsubscribe
  *  - emit
  *  - isSubscribed
- *  - toString
+ *
+ * Private Methods :
+ *  -
  */
 
 (function($, window, document, undefined) {
     "use strict";
+
     /* Private Variables */
-    var instanceID   = 1;
-    var instanceName = "DispatchMe";
-    var defaults     = {
+    var instanceID      = 1;
+    var instanceName    = "DispatchMe";
+    var defaults        = {
         debug: false
     };
-    var overwriteKeys = [
+    var overwriteKeys   = [
         'debug'
     ];
 
@@ -37,19 +37,20 @@
     var privatesMethods = {};
 
     /* Builder Method */
-    var DispatchMe = function(options){
+    var DispatchMe = function(options) {
         this.__construct(options);
     };
     var proto = DispatchMe.prototype;
 
-    proto.debug          = null;
-    proto.id             = null;
-    proto.name           = null;
-    proto.dname          = null;
-    proto.options        = null;
+    /* Private Variables */
+    proto.__id          = null;
+    proto.__name        = null;
+    proto.__debugName   = null;
 
     /* Publics Variables */
-    proto.listeners      = null;
+    proto.debug         = null;
+    proto.options       = null;
+    proto.listeners     = null;
 
     /**
      *
@@ -59,15 +60,17 @@
      * @param   options  all the options that you need
      * @return  object    null || scope
      * @access  private
+     *
      */
     proto.__construct = function(options) {
-        this.id    = instanceID;
-        this.name  = instanceName;
-        this.dname = this.name + ":: ";
+        this.__id        = instanceID;
+        this.__name      = instanceName;
+        this.__debugName = this.__name + ":: ";
+
         this.setOptions(options);
 
-        if (!this.__validateDependencies()) {return null;}
-        if (!this.__validateOptions()) {return null;}
+        if (!this.__validateDependencies()) { return null; }
+        if (!this.__validateOptions()) { return null; }
         instanceID ++;
 
         this.__initialize();
@@ -87,7 +90,7 @@
         var isValid = true;
         if (!window.jQuery) {
             isValid = false;
-            console.warn(this.dname + "You need jquery");
+            console.warn(this.__debugName + "required jQuery (https://jquery.com/)");
         }
         return isValid;
     };
@@ -117,14 +120,16 @@
      *
      */
     proto.setOptions = function(options) {
-        var $scope = this;
-        var settings = $.extend({}, defaults, options);
+        var scope    = this;
+        var settings = (this.options) ? $.extend({}, this.options, options) : $.extend({}, defaults, options);
+
         $.each(settings, function(index, value) {
             if ($.inArray(index, overwriteKeys) != -1) {
-                $scope[index] = value;
+                scope[index] = value;
                 delete settings[index];
             }
         });
+
         this.options = settings;
         return this;
     };
@@ -169,7 +174,7 @@
         var args      = arguments;
         var finalArgs = [];
 
-        if(args) {
+        if (args) {
             var totalArgs = args.length;
             for (var i = 0; i < totalArgs; i++) {
                 if (i < 3) { continue; }
@@ -192,10 +197,10 @@
         }
 
         if (newListener) {
-            if (this.debug) {console.info(this.dname, "subscribe : ", type, scope);}
+            if (this.debug) {console.info(this.__debugName, "subscribe : ", type, scope);}
             this.listeners[type].push({scope:scope, callback:callback, args:args});
         } else {
-            if (this.debug) {console.warn(this.dname, "subscribe, already done : ", type, scope);}
+            if (this.debug) {console.warn(this.__debugName, "subscribe, already done : ", type, scope);}
         }
 
         return this;
@@ -237,7 +242,7 @@
         }
 
         if (removeListener) {
-            if (this.debug) {console.info(this.dname, "unsubscribe : ", type, scope);}
+            if (this.debug) {console.info(this.__debugName, "unsubscribe : ", type, scope);}
         }
 
         return this;
@@ -271,7 +276,7 @@
         };
 
         if(typeof this.listeners[type] != "undefined") {
-            if (this.debug) {console.group(this.dname, "emit", type, target, newparams);}
+            if (this.debug) {console.group(this.__debugName, "emit", type, target, newparams);}
 
             var totalListeners = this.listeners[type].length;
             for(var i = 0; i < totalListeners; i++) {
@@ -297,7 +302,7 @@
                 }
             }
 
-            if (this.debug) {console.groupEnd(this.dname, "emit", type, target, newparams);}
+            if (this.debug) {console.groupEnd(this.__debugName, "emit", type, target, newparams);}
         }
 
         return this;
@@ -322,12 +327,13 @@
         return existListener;
     };
 
-    proto.toString = function(){
-        return "[" + this.name + "]";
+    proto.toString = function() {
+        return "[" + this.__name + "]";
     };
 
     /* Create Me reference if does'nt exist */
-    if(!window.Me){window.Me = {};}
+    if (!window.Me) {window.Me = {};}
+
     /* Initiate to make a Singleton */
     Me.dispatch = new DispatchMe();
 }(jQuery, window, document));
