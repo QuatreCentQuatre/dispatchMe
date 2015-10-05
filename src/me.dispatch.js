@@ -44,8 +44,8 @@
     var privatesMethods = {};
 
     /* Builder Method */
-    var DispatchMe = function(options) {
-        this.__construct(options);
+    var DispatchMe = function() {
+        this.__construct();
     };
     var proto = DispatchMe.prototype;
 
@@ -121,7 +121,7 @@
 
     /**
      *
-     * __validateOptions
+     * __validateArguments
      * Will check if you got all the required options needed to use that plugins
      *
      * @return  boolean
