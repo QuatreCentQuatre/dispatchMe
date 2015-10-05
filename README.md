@@ -1,4 +1,4 @@
-#dispatchMe
+#DispatchMe
 
 Library - Singleton that allow to subscribe, unsubscribe, emit events
 
@@ -6,7 +6,7 @@ Library - Singleton that allow to subscribe, unsubscribe, emit events
 
 ### Version
 
-**1.0.1**
+**1.0.2**
 
 ---
 
@@ -24,7 +24,7 @@ Place the **me.dispatch.js** file in your default JavaScript vendor directory. L
 <script src="js/vendor/jquery-1.10.2.min.js"></script>
 <script src="js/vendor/me.dispatch.js"></script>
 ```
-Here you go ! You're now ready to use dispatchMe. Here how to get started !
+Here you go ! You're now ready to use DispatchMe. Here how to get started !
 
 #### HTML:
 ~~~
