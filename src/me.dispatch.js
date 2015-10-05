@@ -1,6 +1,9 @@
 /**
- * DispatchMe from the MeLibs
- * Library - Singleton that allow to subscribe, unsubscribe, emit events
+ * DispatchMe from the MeLibs (https://github.com/QuatreCentQuatre/dispatchMe/)
+ * Library that let you easily to subscribe, unsubscribe, emit events
+ *
+ * Licence :
+ *  - GLP v2
  *
  * Version :
  *  - 1.0.3
@@ -18,6 +21,10 @@
  *
  * Private Methods :
  *  -
+ *
+ * Updates Needed :
+ *  -
+ *
  */
 
 (function($, window, document, undefined) {
@@ -70,7 +77,7 @@
         this.setOptions(options);
 
         if (!this.__validateDependencies()) {return null;}
-        if (!this.__validateOptions()) {return null;}
+        if (!this.__validateArguments()) {return null;}
 
         instanceID ++;
         this.__initialize();
@@ -121,7 +128,7 @@
      * @access  private
      *
      */
-    proto.__validateOptions = function() {
+    proto.__validateArguments = function() {
         var isValid = true;
 
         return isValid;
