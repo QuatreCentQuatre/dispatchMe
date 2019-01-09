@@ -6,7 +6,7 @@ Library - Singleton that allow to subscribe, unsubscribe, emit events
 
 ### Version
 
-**1.0.2**
+**1.0.3**
 
 ---
 
